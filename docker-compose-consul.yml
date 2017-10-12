@@ -8,6 +8,7 @@ services:
     hostname: consul
     container_name: consul
     image: consul:latest
+    restart: always
     environment:
       - CONSUL_LOCAL_CONFIG={"disable_update_check":true}
     entrypoint:
@@ -31,6 +32,7 @@ services:
     command: -internal consul://consul:8500
     privileged: true
     image: gliderlabs/registrator:latest
+    restart: always
     links:
       - consul
     volumes:

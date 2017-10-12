@@ -1,9 +1,9 @@
 upstream blue {
     {{ range service "backends.blue" }}
-        server {{ .Name }}:{{ .Port }};
+        server {{ .Address }}:{{ .Port }};
     {{ else }}
         {{ range service "backends.green" }}
-            server {{ .Name }}:{{ .Port }};
+            server {{ .Address }}:{{ .Port }};
         {{ else }}
             server 127.0.0.1:12345;
         {{ end }}
@@ -12,10 +12,10 @@ upstream blue {
 
 upstream green {
     {{ range service "backends.green" }}
-        server {{ .Name }}:{{ .Port }};
+        server {{ .Address }}:{{ .Port }};
     {{ else }}
         {{ range service "backends.blue" }}
-            server {{ .Name }}:{{ .Port }};
+            server {{ .Address }}:{{ .Port }};
         {{ else }}
             server 127.0.0.1:12345;
         {{ end }}

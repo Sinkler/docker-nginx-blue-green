@@ -4,6 +4,7 @@ services:
   blue:
     container_name: blue
     image: app:latest
+    restart: always
     environment:
       - SERVICE_80_NAME=blue
       - SERVICE_80_TAGS=backends
@@ -24,14 +25,10 @@ services:
   nginx:
     container_name: nginx
     build: ./nginx/
+    restart: always
     environment:
       - SERVICE_NAME=nginx
       - SERVICE_TAGS=nginx
-    external_links:
-      - consul
-    links:
-      - blue
-      - green
     networks:
       - app
       - consul
