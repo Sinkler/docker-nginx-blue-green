@@ -1,0 +1,45 @@
+version: '3.1'
+
+services:
+  blue:
+    container_name: blue
+    image: app:latest
+    environment:
+      - SERVICE_80_NAME=blue
+      - SERVICE_80_TAGS=backends
+    networks:
+      - app
+      - consul
+
+  green:
+    container_name: green
+    image: app:new
+    environment:
+      - SERVICE_80_NAME=green
+      - SERVICE_80_TAGS=backends
+    networks:
+      - app
+      - consul
+
+  nginx:
+    container_name: nginx
+    build: ./nginx/
+    environment:
+      - SERVICE_NAME=nginx
+      - SERVICE_TAGS=nginx
+    external_links:
+      - consul
+    links:
+      - blue
+      - green
+    networks:
+      - app
+      - consul
+    ports:
+      - 80:80
+
+networks:
+  app:
+  consul:
+    external:
+      name: consul

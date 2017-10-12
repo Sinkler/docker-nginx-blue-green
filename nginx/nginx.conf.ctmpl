@@ -1,0 +1,46 @@
+upstream blue {
+    {{ range service "backends.blue" }}
+        server {{ .Name }}:{{ .Port }};
+    {{ else }}
+        {{ range service "backends.green" }}
+            server {{ .Name }}:{{ .Port }};
+        {{ else }}
+            server 127.0.0.1:12345;
+        {{ end }}
+    {{ end }}
+}
+
+upstream green {
+    {{ range service "backends.green" }}
+        server {{ .Name }}:{{ .Port }};
+    {{ else }}
+        {{ range service "backends.blue" }}
+            server {{ .Name }}:{{ .Port }};
+        {{ else }}
+            server 127.0.0.1:12345;
+        {{ end }}
+    {{ end }}
+}
+
+server {
+    listen 80 default_server;
+    server_name localhost;
+
+    location / {
+        add_header Pragma no-cache;
+        add_header Cache-Control no-cache;
+        {{ with $key_value := keyOrDefault "deploy/backend" "blue" }}
+            {{ if or (eq $key_value "blue") (eq $key_value "green") }}
+                proxy_pass http://{{ $key_value }};
+            {{ else }}
+                proxy_pass http://blue;
+            {{ end }}
+        {{ end }}
+        proxy_set_header Host $host;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Forwarded-Protocol $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_http_version 1.1;
+    }
+}
