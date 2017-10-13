@@ -7,3 +7,5 @@ ADD app.conf /etc/nginx/conf.d/app.conf
 RUN mkdir /app
 
 ADD index.html /app
+
+ADD wait-for-it.sh /app

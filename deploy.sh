@@ -14,6 +14,9 @@ cd ..
 echo 'Update the green container'
 docker-compose up -d green
 
+echo 'Check the green container is ready'
+docker-compose run --rm --entrypoint bash green /app/wait-for-it.sh green:80 --timeout=60
+
 echo 'Check the new app'
 status=$(docker-compose run --rm nginx curl ${gc} -o /dev/null -Isw '%{http_code}')
 if [[ ${status} != '200' ]]
@@ -33,6 +36,9 @@ docker tag app:new app:latest
 
 echo 'Update the blue container'
 docker-compose up -d blue
+
+echo 'Check the blue container is ready'
+docker-compose run --rm --entrypoint bash blue /app/wait-for-it.sh blue:80 --timeout=60
 
 ./activate.sh 'blue' ${bc} ${kv}
 
