@@ -6,7 +6,7 @@ echo "Activate the ${1} container, old Nginx pids: ${pid_was}"
 echo "Set the ${1} container as working"
 docker-compose run --rm nginx curl -X PUT -d $1 $3 > /dev/null
 
-echo 'Check that config was reload'
+echo 'Check that config was reloaded'
 count=0
 while [ 1 ]
 do
