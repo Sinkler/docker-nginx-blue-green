@@ -2,25 +2,21 @@
 
 set -e
 
-kv=http://localhost:8500/v1/kv/deploy/backend
+source init.sh
 
-docker exec nginx true 2>/dev/null || docker-compose up -d
-
-echo 'Set previous container as latest'
+echo 'Set the previous image as latest'
 docker tag app:previous app:latest
 docker tag app:previous app:new
 
-echo 'Update green container'
+echo 'Update the green container'
 docker-compose up -d green
 
-echo 'Set green container as working'
-curl -X PUT -d 'green' ${kv}
+./activate.sh 'green' ${gc} ${kv}
 
-echo 'Update blue container'
+echo 'Update the blue container'
 docker-compose up -d blue
 
-echo 'Set blue container as working'
-curl -X PUT -d 'blue' ${kv}
+./activate.sh 'blue' ${bc} ${kv}
 
-echo 'Stop green container'
+echo 'Stop the green container'
 docker-compose stop green

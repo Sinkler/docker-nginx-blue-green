@@ -11,4 +11,4 @@ def get_status_code(host, path="/"):
 
 
 while True:
-    print get_status_code('localhost')
+    print get_status_code('localhost') == 200
