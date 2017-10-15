@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-echo 'Set the default container as working'
-docker-compose run --rm nginx curl -X PUT -d blue $1 > /dev/null
+key_value_store=$1
+state=$2
 
-echo 'Pause'
-sleep 10
+echo 'Set the previous container as working'
+docker-compose run --rm nginx curl -X PUT -d ${state} ${key_value_store} > /dev/null
 
-echo 'Stop the green container'
-docker-compose stop green
+echo 'Stop the ${old_state} container'
+docker-compose stop ${state}
 
 echo 'Remove the new image'
 docker tag app:latest app:new

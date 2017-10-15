@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-kv=http://consul:8500/v1/kv/deploy/backend
-bc=http://blue
-gc=http://green
+key_value_store=http://consul:8500/v1/kv/deploy/backend
+blue_upstream=http://blue
+green_upstream=http://green
 
 if [[ $(docker images -q app:latest 2> /dev/null) == '' ]]
 then
@@ -11,11 +11,18 @@ then
     docker build . -t app:latest
     cd ..
 fi
-if [[ $(docker images -q app:new 2> /dev/null) == '' ]]
+
+if [[ $(docker images -q app:previous 2> /dev/null) == '' ]]
 then
-    echo 'Build a new app:new image'
+    echo 'Build a new app:previous image'
     cd app
-    docker build . -t app:new
+    docker build . -t app:previous
     cd ..
 fi
-docker exec nginx true 2>/dev/null || docker-compose up -d
+
+if [[ $(docker exec nginx echo 'yes' 2> /dev/null) == '' ]]
+then
+    docker tag app:latest app:blue
+    docker tag app:latest app:green
+    docker-compose up -d
+fi

@@ -3,7 +3,7 @@ version: '3.1'
 services:
   blue:
     container_name: blue
-    image: app:latest
+    image: app:blue
     restart: always
     environment:
       - SERVICE_80_NAME=blue
@@ -14,7 +14,7 @@ services:
 
   green:
     container_name: green
-    image: app:new
+    image: app:green
     environment:
       - SERVICE_80_NAME=green
       - SERVICE_80_TAGS=backends
