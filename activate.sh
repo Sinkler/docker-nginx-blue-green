@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 new_state=$1
 old_state=$2
 new_upstream=$3

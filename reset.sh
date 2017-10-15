@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 key_value_store=$1
 state=$2
 

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 key_value_store=http://consul:8500/v1/kv/deploy/backend
 blue_upstream=http://blue
 green_upstream=http://green
