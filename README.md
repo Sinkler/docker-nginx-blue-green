@@ -1,4 +1,4 @@
-# Blue/Green deployment wih Docker compose, Nginx, Consul and Registrator
+# PoC: Blue-green deployment wih Docker Compose, Nginx, Consul and Registrator
 
 * Run `docker network create consul` to create a new network;
 * Run `docker-compose -f docker-compose-consul.yml up -d` to start Consul and Registrator;
@@ -10,3 +10,6 @@
 * Run `./rollback.sh` to imitate a rollback;
 * Open in browser `http://localhost/` to check an old version;
 * Use `python2.7 test.py` in a new terminal to be sure that an app is always online during a deploy/rollback.
+
+You can read more about this technique here: 
+https://medium.com/rate-engineering/using-docker-containers-to-run-a-distributed-application-locally-eeabd360bca3
